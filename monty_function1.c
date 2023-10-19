@@ -41,7 +41,7 @@ void push_to_stack(stack_t **stack_data, unsigned int number_line)
 		exit(EXIT_FAILURE);
 	}
 	m = atoi(var.value);
-	add_node(stack_data, m);
+	pp_add_node(stack_data, m);
 }
 
 /**
