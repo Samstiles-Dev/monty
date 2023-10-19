@@ -25,7 +25,7 @@ void push_to_stack(stack_t **stack_data, unsigned int number_line)
 		}
 		if (flag == 1)
 		{
-			fprintf(stderr, "L%d: usage: push integer to stact\n", number_line);
+			fprintf(stderr, "L%d: usage: push integer\n", number_line);
 			fclose(var.file);
 			free(var.content);
 			free_stack(*stack_data);
@@ -75,7 +75,7 @@ void print_top_elem(stack_t **stack_data, unsigned int number_line)
 	temp_data = *stack_data;
 	if (temp_data == NULL)
 	{
-		fprintf(stderr, "L%d: can't print top element, stack empty\n", number_line);
+		fprintf(stderr, "L%d: can't pint, stack empty\n", number_line);
 		fclose(var.file);
 		free(var.content);
 		free_stack(*stack_data);

@@ -19,7 +19,7 @@ void pp_mul(stack_t **stack, unsigned int number_line)
 
 	if (len_value < 2)
 	{
-		fprintf(stderr, "L%d: can't multiply, stack is too short\n", number_line);
+		fprintf(stderr, "L%d: can't mul, stack too short\n", number_line);
 		fclose(var.file);
 		free(var.content);
 		free_stack(*stack);
@@ -52,7 +52,7 @@ void pp_mod(stack_t **stack, unsigned int number_line)
 
 	if (len_value < 2)
 	{
-		fprintf(stderr, "L%d: can't modulus, stack is too short\n", number_line);
+		fprintf(stderr, "L%d: can't mod, stack too short\n", number_line);
 		fclose(var.file);
 		free(var.content);
 		free_stack(*stack);
