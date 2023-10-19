@@ -60,7 +60,7 @@ extern var_t var;
 int (*get_op_func(char *s))(stack_t, unsigned int);
 void free_stack(stack_t *head);
 void pp_add_node(stack_t **head, const int n);
-int pp_execute(char *content, stack_t **stack, unsigned int line_num, FILE *file); 
+int _execute(char *content, stack_t **stack, unsigned int line_num, FILE *file); 
 void push_to_stack(stack_t **stack_data, unsigned int number_line);
 void print_stack(stack_t **stack_data, unsigned int number_line);
 void print_top_elem(stack_t **stack_data, unsigned int number_line);

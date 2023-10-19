@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 			free(_line_content);
 			break;
 		}
-		pp_execute(_line_content, &stack, _line_num, file);
+		_execute(_line_content, &stack, _line_num, file);
 		free(_line_content);
 	}
 	free_stack(stack);

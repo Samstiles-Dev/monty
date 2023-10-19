@@ -1,7 +1,7 @@
 #include "monty.h"
 
 /**
-  * pp_execute - this function gets the correct op function code and executes
+  * _execute - this function gets the correct op function code and executes
   * @line_num: the name of the operator
   * @stack: the first head of the stack
   * @content: this is the command
@@ -9,7 +9,7 @@
   * Return: pointer to operation if its found or NULL if not
   */
 
-int pp_execute(char *content, stack_t **stack, unsigned int line_num, FILE *file)
+int _execute(char *content, stack_t **stack, unsigned int line_num, FILE *file)
 {
 	instruction_t func_names[] = {
 		{"push", push_to_stack},
@@ -30,11 +30,8 @@ int pp_execute(char *content, stack_t **stack, unsigned int line_num, FILE *file
 
 	_op = strtok(content, " \n\t\r");
 	if (_op && _op[0] == '#')
-	{
 		return (0);
-	}
 	var.value = strtok(NULL, " \n\t\r");
-
 	i = 0;
 	while (func_names[i].opcode && _op != NULL)
 	{
