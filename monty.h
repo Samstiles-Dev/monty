@@ -64,8 +64,8 @@ void find_func(char *, char *, int, int);
 /*Stack operations*/
 stack_t *create_node(int n);
 void free_nodes(void);
-void print_stack(stack_t **, unsigned int);
-void add_to_stack(stack_t **, unsigned int);
+void s_print_stack(stack_t **, unsigned int);
+void s_add_to_stack(stack_t **, unsigned int);
 void add_to_queue(stack_t **, unsigned int);
 
 void call_fun(op_func, char *, char *, int, int);

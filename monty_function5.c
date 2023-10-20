@@ -36,7 +36,6 @@ int parse_line(char *buffer, int index, int format)
  * @f_name: the name of the file
  * Return: void
  */
-
 void open_file(char *f_name)
 {
 	FILE *fd = fopen(f_name, "r");
