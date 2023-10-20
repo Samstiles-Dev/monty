@@ -1,51 +1,83 @@
 #include "monty.h"
-
-var_t var = {NULL, NULL, NULL};
+stack_t *head = NULL;
 
 /**
-  * main - main fuunction (entry point)
-  * @argc: the number of command line arguments passed
-  * @argv: a string that contains all the arguments
-  * Return: always 0
-  */
+ * main - the main function (entry point)
+ * @argc: arguments count
+ * @argv: list of arguments
+ * Return: always 0
+ */
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-	FILE *file;
-	stack_t *stack;
-	size_t _line_num = 0;
-	char *_line_content;
-	size_t size = 0;
-	int readline = 0;
-
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	file = fopen(argv[1], "r");
-	var.file = file;
-
-	if (!file)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-	while (1)
-	{
-		_line_content = NULL;
-		readline = getline(&_line_content, &size, file);
-		var.content = _line_content;
-		_line_num++;
-		if (readline == -1)
-		{
-			free(_line_content);
-			break;
-		}
-		_execute(_line_content, &stack, _line_num, file);
-		free(_line_content);
-	}
-	free_stack(stack);
-	fclose(file);
+	open_file(argv[1]);
+	free_nodes();
 	return (0);
+}
+
+/**
+ * create_node - this function creates a node.
+ * @n: Number to go inside the node.
+ * Return: Upon sucess a pointer to the node. Otherwise NULL.
+ */
+stack_t *create_node(int n)
+{
+	stack_t *node;
+
+	node = malloc(sizeof(stack_t));
+	if (node == NULL)
+		err(4);
+	node->next = NULL;
+	node->prev = NULL;
+	node->n = n;
+	return (node);
+}
+
+/**
+ * free_nodes - this function frees nodes in the stack.
+ */
+void free_nodes(void)
+{
+	stack_t *stack_tmp;
+
+	if (head == NULL)
+		return;
+
+	while (head != NULL)
+	{
+		stack_tmp = head;
+		head = head->next;
+		free(stack_tmp);
+	}
+}
+
+
+/**
+ * add_to_queue - this func adds a node to the queue.
+ * @new_node: Points to the new node.
+ * @ln: line number of the opcode.
+ */
+void add_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln)
+{
+	stack_t *stack_tmp;
+
+	if (new_node == NULL || *new_node == NULL)
+		exit(EXIT_FAILURE);
+	if (head == NULL)
+	{
+		head = *new_node;
+		return;
+	}
+	stack_tmp = head;
+	while (stack_tmp->next != NULL)
+		stack_tmp = stack_tmp->next;
+
+	stack_tmp->next = *new_node;
+	(*new_node)->prev = stack_tmp;
+
 }

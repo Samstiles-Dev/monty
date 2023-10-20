@@ -1,20 +1,19 @@
-#ifndef _MONTY_H_
-#define _MONTY_H_
-#define  _GNU_SOURCE
+#ifndef MONTY_H
+#define MONTY_H
 
+#define _GNU_SOURCE
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <fcntl.h>
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdarg.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
- * @prev: this points to the previous element of the stack (or queue)
- * @next: this points to the next element of the stack (or queue)
+ * @prev: points to the previous element of the stack (or queue)
+ * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
  * for stack, queues, LIFO, FIFO
@@ -40,38 +39,46 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/**
-  * var_t - this contains the value, file and line content
-  * @value: this is the value to be added
-  * @file: this is  a pointer to monty file
-  * @content: this is the content of a line
-  *
-  * Description - carries values through the program
-  */
+extern stack_t *head;
+typedef void (*op_func)(stack_t **, unsigned int);
 
-typedef struct vars_t
-{
-	char *value;
-	FILE *file;
-	char *content;
-} var_t;
+/*String operations*/
+void s_print_char(stack_t **, unsigned int);
+void s_print_str(stack_t **, unsigned int);
+void s_rotl(stack_t **, unsigned int);
 
-extern var_t var;
-int (*get_op_func(char *s))(stack_t, unsigned int);
-void free_stack(stack_t *head);
-void pp_add_node(stack_t **head, const int n);
-int _execute(char *content, stack_t **stack, unsigned int line_num, FILE *file); 
-void push_to_stack(stack_t **stack_data, unsigned int number_line);
-void print_stack(stack_t **stack_data, unsigned int number_line);
-void print_top_elem(stack_t **stack_data, unsigned int number_line);
-void pop_elem(stack_t **stack_data, unsigned int number_line);
-void add_to_stack(stack_t **stack, unsigned int number_line);
-void swap_elem(stack_t **stack, unsigned int number_line);
-void pp_nop(stack_t **stack, unsigned int number_line);
-void pp_sub(stack_t **stack, unsigned int number_line);
-void pp_div(stack_t **stack, unsigned int number_line);
-void pp_mul(stack_t **stack, unsigned int number_line);
-void pp_mod(stack_t **stack, unsigned int number_line);
+/*Math operations with nodes*/
+void s_add_nodes(stack_t **, unsigned int);
+void s_sub_nodes(stack_t **, unsigned int);
+void s_div_nodes(stack_t **, unsigned int);
+void s_mul_nodes(stack_t **, unsigned int);
+void s_mod_nodes(stack_t **, unsigned int);
 
+/*file operations*/
+void open_file(char *file_name);
+int parse_line(char *buffer, int line_number, int format);
+void read_file(FILE *);
+int len_chars(FILE *);
+void find_func(char *, char *, int, int);
 
-#endif /* _MONTY_H */
+/*Stack operations*/
+stack_t *create_node(int n);
+void free_nodes(void);
+void print_stack(stack_t **, unsigned int);
+void add_to_stack(stack_t **, unsigned int);
+void add_to_queue(stack_t **, unsigned int);
+
+void call_fun(op_func, char *, char *, int, int);
+
+void s_print_top(stack_t **, unsigned int);
+void s_pop_top(stack_t **, unsigned int);
+void s_nop(stack_t **, unsigned int);
+void s_swap_nodes(stack_t **, unsigned int);
+
+/*Error hanlding*/
+void err(int error_code, ...);
+void more_err(int error_code, ...);
+void string_err(int error_code, ...);
+void s_rotr(stack_t **, unsigned int);
+
+#endif

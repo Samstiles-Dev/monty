@@ -1,153 +1,96 @@
 #include "monty.h"
 
 /**
-  * swap_elem - this function swaps the top two elements on the stack
-  * @stack: this is the head of the stack
-  * @number_line: ths is the line number
-  */
-
-void swap_elem(stack_t **stack, unsigned int number_line)
-{
-	stack_t *data_temp;
-	int len_value = 0, n;
-
-	data_temp = *stack;
-	while (data_temp != NULL)
-	{
-		data_temp = data_temp->next;
-		len_value++;
-	}
-
-	if (len_value < 2)
-	{
-		fprintf(stderr, "L%d: can't swap, stack too short\n", number_line);
-		fclose(var.file);
-		free(var.content);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	data_temp = *stack;
-	n = data_temp->n;
-	data_temp->n = data_temp->next->n;
-	data_temp->next->n = n;
-}
-
-/**
-  * add_to_stack - this function adds the two top elements of the stack
-  * @stack:  this is the head of the stack
-  * @number_line: this is te line number
-  */
-
-void add_to_stack(stack_t **stack, unsigned int number_line)
-{
-	stack_t *data_temp;
-	int len_value = 0, g, h;
-
-	data_temp = *stack;
-	while (data_temp != NULL)
-	{
-		data_temp = data_temp->next;
-		len_value++;
-	}
-
-	if (len_value < 2)
-	{
-		fprintf(stderr, "L%d: can't add, stack too short\n", number_line);
-		fclose(var.file);
-		free(var.content);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	data_temp = *stack;
-	g = data_temp->n;
-	h = data_temp->next->n;
-	data_temp->next->n = g + h;
-	*stack = data_temp->next;
-	free(data_temp);
-}
-
-/**
-  * pp_nop - this doesn't do anything
-  * @stack: this is the head of the stack
-  * @number_line: this is the line number
-  */
-void pp_nop(stack_t **stack, unsigned int number_line)
+ * s_nop - Does nothing.
+ * @stack: Points to top node of the stack.
+ * @index: the line number of the opcode.
+ */
+void s_nop(stack_t **stack, unsigned int index)
 {
 	(void)stack;
-	(void)number_line;
+	(void)index;
+}
+
+
+/**
+ * s_swap_nodes - Swaps the top two elements of the stack.
+ * @stack: Points to the top node of the stack.
+ * @index: the line number of the opcode.
+ */
+void s_swap_nodes(stack_t **stack, unsigned int index)
+{
+	stack_t *stack_tmp;
+
+	if (stack == NULL || *stack == NULL || (*stack)->next == NULL)
+		more_err(8, index, "swap");
+	stack_tmp = (*stack)->next;
+	(*stack)->next = stack_tmp->next;
+	if (stack_tmp->next != NULL)
+		stack_tmp->next->prev = *stack;
+	stack_tmp->next = *stack;
+	(*stack)->prev = stack_tmp;
+	stack_tmp->prev = NULL;
+	*stack = stack_tmp;
 }
 
 /**
-  * pp_sub - this function subtract the two top elements of the stack
-  * @stack:  this is the head of the stack
-  * @number_line: this is te line number
-  */
-
-void pp_sub(stack_t **stack, unsigned int number_line)
+ * s_add_nodes - Adds the top two elements of the stack.
+ * @stack: Points to the top node of the stack.
+ * @index: the line number of the opcode.
+ */
+void s_add_nodes(stack_t **stack, unsigned int index)
 {
-	stack_t *data_temp;
-	int len_value = 0, g, h;
+	int result;
 
-	data_temp = *stack;
-	while (data_temp != NULL)
-	{
-		data_temp = data_temp->next;
-		len_value++;
-	}
+	if (stack == NULL || *stack == NULL || (*stack)->next == NULL)
+		more_err(8, index, "add");
 
-	if (len_value < 2)
-	{
-		fprintf(stderr, "L%d: can't sub, stack too short\n", number_line);
-		fclose(var.file);
-		free(var.content);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	data_temp = *stack;
-	g = data_temp->n;
-	h = data_temp->next->n;
-	data_temp->next->n = h - g;
-	*stack = data_temp->next;
-	free(data_temp);
+	(*stack) = (*stack)->next;
+	result = (*stack)->n + (*stack)->prev->n;
+	(*stack)->n = result;
+	free((*stack)->prev);
+	(*stack)->prev = NULL;
 }
+
+
 /**
-  * pp_div - this divide the two top elements of the stack
-  * @stack:  this is the head of the stack
-  * @number_line: this is te line number
-  */
-
-void pp_div(stack_t **stack, unsigned int number_line)
+ * s_sub_nodes - Subs the top two elements of the stack.
+ * @stack: Points to top node of the stack.
+ * @index: the line number of the opcode.
+ */
+void s_sub_nodes(stack_t **stack, unsigned int index)
 {
-	stack_t *data_temp;
-	int len_value = 0, g, h;
+	int result;
 
-	data_temp = *stack;
-	while (data_temp != NULL)
-	{
-		data_temp = data_temp->next;
-		len_value++;
-	}
+	if (stack == NULL || *stack == NULL || (*stack)->next == NULL)
+		more_err(8, index, "sub");
 
-	if (len_value < 2)
-	{
-		fprintf(stderr, "L%d: can't div, stack too short\n", number_line);
-		fclose(var.file);
-		free(var.content);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	data_temp = *stack;
-	if (data_temp->n == 0)
-	{
-		fprintf(stderr, "L%d: division by zero\n", number_line);
-		fclose(var.file);
-		free(var.content);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	g = data_temp->n;
-	h = data_temp->next->n;
-	data_temp->next->n = h / g;
-	*stack = data_temp->next;
-	free(data_temp);
+
+	(*stack) = (*stack)->next;
+	result = (*stack)->n - (*stack)->prev->n;
+	(*stack)->n = result;
+	free((*stack)->prev);
+	(*stack)->prev = NULL;
+}
+
+
+/**
+ * s_div_nodes - Divide the top two elements of the stack.
+ * @stack: Points to top node of the stack.
+ * @index: the line number of the opcode.
+ */
+void s_div_nodes(stack_t **stack, unsigned int index)
+{
+	int result;
+
+	if (stack == NULL || *stack == NULL || (*stack)->next == NULL)
+		more_err(8, index, "div");
+
+	if ((*stack)->n == 0)
+		more_err(9, index);
+	(*stack) = (*stack)->next;
+	result = (*stack)->n / (*stack)->prev->n;
+	(*stack)->n = result;
+	free((*stack)->prev);
+	(*stack)->prev = NULL;
 }
